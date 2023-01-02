@@ -1,11 +1,14 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Details from "./components/Details";
-import SearchParams from "./components/SearchParams";
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import AdoptedPetContext from "./context/AdoptedPetContext";
 // import Pet from "./Pet";
+
+// eslint-disable-next-line import/no-unresolved
+const Details = lazy(() => import("./Components/Details"));
+// eslint-disable-next-line import/no-unresolved
+const SearchParams = lazy(() => import("./Components/SearchParams"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,15 +31,26 @@ const App = () => {
       <BrowserRouter>
         <QueryClientProvider client={queryClient}>
           <AdoptedPetContext.Provider value={adoptedPet}>
-            <header>
-              <Link className="text-6xl text-white hover:text-gray-200" to="/">
-                Adopt Me!
-              </Link>
-            </header>
-            <Routes>
-              <Route path="/" element={<SearchParams />} />
-              <Route path="/details/:id" element={<Details />} />
-            </Routes>
+            <Suspense
+              fallback={
+                <div className="loading-pane">
+                  <h2 className="loader">🐾</h2>
+                </div>
+              }
+            >
+              <header>
+                <Link
+                  className="text-6xl text-white hover:text-gray-200"
+                  to="/"
+                >
+                  Adopt Me!
+                </Link>
+              </header>
+              <Routes>
+                <Route path="/" element={<SearchParams />} />
+                <Route path="/details/:id" element={<Details />} />
+              </Routes>
+            </Suspense>
           </AdoptedPetContext.Provider>
         </QueryClientProvider>
       </BrowserRouter>
