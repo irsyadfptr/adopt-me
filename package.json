@@ -9,8 +9,8 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,css,scss,md}\"",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\" --quiet",
     "dev": "vite",
-    "build:client": "vite build --outDir=dist/client",
-    "build:server": "vite build --outDir=dist/server --ssr ServerApp.jsx",
+    "build:client": "vite build --outDir ../dist/client",
+    "build:server": "vite build --outDir ../dist/server --ssr ServerApp.jsx",
     "build": "npm run build:client && npm run build:server",
     "start": "node server.js",
     "preview": "vite preview"

@@ -2,14 +2,14 @@ import express from "express";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import renderApp from "./src/dist/server/ServerApp.js";
+import renderApp from "./dist/server/ServerApp.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const PORT = process.env.PORT || 3001;
 
 const html = fs
-    .readFileSync(path.resolve(__dirname, "./src/dist/client/index.html"))
+    .readFileSync(path.resolve(__dirname, "./dist/client/index.html"))
     .toString();
 
 const parts = html.split("not rendered");
@@ -18,7 +18,7 @@ const app = express();
 
 app.use(
     "/assets",
-    express.static(path.resolve(__dirname, "./src/dist/client/assets"))
+    express.static(path.resolve(__dirname, "./dist/client/assets"))
 );
 app.use((req, res) => {
     res.write(parts[0]);
