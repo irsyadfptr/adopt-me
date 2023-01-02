@@ -1,4 +1,4 @@
-<h1 align="center">Welcome to adopt me 👋</h1>
+<h1 align="center">Adopt Me</h1>
 <p>
   <a href="https://www.npmjs.com/package/y" target="_blank">
     <img alt="Version" src="https://img.shields.io/npm/v/y.svg">
