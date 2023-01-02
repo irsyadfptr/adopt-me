@@ -4,10 +4,8 @@ import { useState, lazy, Suspense } from "react";
 import AdoptedPetContext from "./context/AdoptedPetContext";
 // import Pet from "./Pet";
 
-// eslint-disable-next-line import/no-unresolved
-const Details = lazy(() => import("./Components/Details"));
-// eslint-disable-next-line import/no-unresolved
-const SearchParams = lazy(() => import("./Components/SearchParams"));
+const Details = lazy(() => import("./components/Details"));
+const SearchParams = lazy(() => import("./components/SearchParams"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
