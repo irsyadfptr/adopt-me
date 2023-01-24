@@ -10,19 +10,21 @@ import AdoptedPetContext from "../context/AdoptedPetContext";
 import fetchSearch from "../fetcher/fetchSearch";
 import useBreedList from "../hooks/useBreedList";
 import Results from "./Results";
-const ANIMAL = ["bird", "cat", "dog", "rabbit", "reptile"];
+import { Animal } from "../APIResponseTypes";
+
+const ANIMALS: Animal[] = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
   const [requestParams, setRequestParams] = useState({
     location: "",
-    animal: "",
+    animal: "" as Animal,
     breed: "",
   });
-  const [animal, setAnimal] = useState("");
+  const [animal, setAnimal] = useState("" as Animal);
   const [BREEDS] = useBreedList(animal);
   const [adoptedPet] = useContext(AdoptedPetContext);
 
-  const results = useQuery(["pets", requestParams], fetchSearch);
+  const results = useQuery(["search", requestParams], fetchSearch);
   const pets = results?.data?.pets || [];
   const [isPending, startTransition] = useTransition();
   const defferedPets = useDeferredValue(pets);
@@ -47,11 +49,12 @@ const SearchParams = () => {
         className="p-10 mb-10 rounded-lg bg-gray-200 shadow-lg flex flex-col justify-center items-center"
         onSubmit={(e) => {
           e.preventDefault();
-          const formData = new FormData(e.target);
+          const formData = new FormData(e.currentTarget);
           const obj = {
-            animal: formData.get("animal") ?? "",
-            breed: formData.get("breed") ?? "",
-            location: formData.get("location") ?? "",
+            animal:
+              (formData.get("animal")?.toString() as Animal) ?? ("" as Animal),
+            breed: formData.get("breed")?.toString() ?? "",
+            location: formData.get("location")?.toString() ?? "",
           };
           startTransition(() => {
             setRequestParams(obj);
@@ -75,12 +78,12 @@ const SearchParams = () => {
             className="search-input"
             value={animal}
             onChange={(e) => {
-              setAnimal(e.target.value);
+              setAnimal(e.target.value as Animal);
             }}
-            onBlur={(e) => setAnimal(e.target.value)}
+            onBlur={(e) => setAnimal(e.target.value as Animal)}
           >
             <option />
-            {ANIMAL.map((animal) => (
+            {ANIMALS.map((animal) => (
               <option value={animal} key={animal}>
                 {animal}
               </option>
