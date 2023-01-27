@@ -5,15 +5,20 @@ import fetchPet from "../fetcher/fetchPet";
 import ErrorBoundary from "./ErrorBoundary";
 import { lazy, useContext, useState } from "react";
 import AdoptedPetContext from "../context/AdoptedPetContext";
+import { PetAPIResponse } from "../APIResponseTypes";
 
 const Modal = lazy(() => import("./Modal"));
 
 const Details = () => {
+  const { id } = useParams();
+  if (!id) {
+    throw new Error("No id is provided");
+  }
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  // const results = useQuery(["details", id], fetchPet);
+  const results = useQuery<PetAPIResponse>(["details", id], fetchPet);
   const [_, setAdoptedPet] = useContext(AdoptedPetContext); // eslint-disable-line
-  const { id } = useParams();
-  const results = useQuery(["details", id], fetchPet);
 
   if (results.isLoading) {
     return (
@@ -23,7 +28,10 @@ const Details = () => {
     );
   }
 
-  const pet = results.data.pets[0];
+  const pet = results?.data?.pets[0];
+  if (!pet) {
+    throw new Error("Pet not found");
+  }
 
   return (
     <div className="details">
@@ -58,10 +66,10 @@ const Details = () => {
   );
 };
 
-function DetailsErrorBoundary(props) {
+function DetailsErrorBoundary() {
   return (
     <ErrorBoundary>
-      <Details {...props} />
+      <Details />
     </ErrorBoundary>
   );
 }
